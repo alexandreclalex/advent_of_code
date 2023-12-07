@@ -37,6 +37,3 @@ while queue:
                 score[x+dx][y+dy] = score[x][y] + 1
                 visited[x+dx][y+dy] = True
                 queue.appendleft((x+dx, y+dy))
-
-for row in score:
-    print(row)
