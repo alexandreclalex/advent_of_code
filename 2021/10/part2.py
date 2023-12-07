@@ -1,4 +1,4 @@
-
+from statistics import median
 
 with open('input.txt') as f:
     lines = [line[:-1] for line in f]
@@ -11,6 +11,20 @@ counterparts = dict()
 for i in range(8):
     counterparts[chars[i]] = chars[-i-1] 
     
+
+def score_remaining(stack):
+    values = {
+        ')': 1,
+        ']': 2,
+        '}': 3,
+        '>': 4
+    }
+    score = 0
+    for val in stack[::-1]:
+        score *=5
+        score += values[counterparts[val]]
+    return score
+    
 def check_line(line):
     stack = []
     for char in line:
@@ -19,9 +33,8 @@ def check_line(line):
         else:
             expected_closer = counterparts[stack.pop()]
             if char != expected_closer:
-                # print('Expected', expected_closer, 'but got', char)
-                return score_values[char]
-    return 0
+                return None
+    return score_remaining(stack)
 
 score_values = {
     ')': 3,
@@ -30,4 +43,10 @@ score_values = {
     '>': 25137
 }
 
-print(sum(map(check_line, lines)))
+scores = []
+for line in lines:
+    score = check_line(line)
+    if score is not None:
+        scores.append(score)
+
+print(median(scores))
